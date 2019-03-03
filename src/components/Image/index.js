@@ -1,10 +1,10 @@
 import React from "react";
-import "./style.css";
+import "./styles.css";
 
 function Image(props) {
 	return (
 		<div className="img-container">
-			<img alt={props.name} src={props.src} key={props.id} />
+			<img alt={props.name} src={props.src} key={props.id} className="img-thumbnail"/>
 		</div>
 	);
 };
