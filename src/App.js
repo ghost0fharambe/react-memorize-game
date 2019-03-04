@@ -1,21 +1,27 @@
 import React, { Component } from 'react';
+import Navbar from "./components/Navbar";
 import Image from "./components/Image";
 import Wrapper from "./components/Wrapper";
 import Title from "./components/Title";
 import images from "./pictures.json";
 import './App.css';
 
-var guessedArray = [];
+let score;
+let losses;
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       images,
-      guessedArray
+      guessedArray: [],
+      score: 0,
+      losses: 0,
+      highscore: 0
     }
   }
 
+  //Function to shuffle images
   shuffleImages = () => {
     let array = [];
     let images = this.state.images;
@@ -30,28 +36,59 @@ class App extends Component {
     };
   };
 
+  //Function to handle guessing logic
   makeGuess = id => {
-    this.shuffleImages();
+    let array = [];
     let guessed = this.state.guessedArray;
-    console.log(this.state.guessedArray)
-    for (let i = 0; i < guessed.length; i++) {
-      if (guessed[i] === id) {
-        console.log("lost");
-      } else {
-        console.log("test");
-        this.shuffleImages();
-      }
-    }
+    if (guessed.includes(id)) {
+      console.log("lost");
+      this.incrementLosses();
+      this.resetGame();
+    } else {
+      this.incrementScore();
+      array.push(id);
+      this.setState({ guessedArray: array })
+      this.shuffleImages();
+    };
+  };
+
+  //Function to reset state/game
+  resetGame = () => {
+    this.setState({
+      images: images,
+      guessedArray: [],
+      score: 0
+    });
+  };
+
+  //Function to increment Score
+  incrementScore = () => {
+    score = this.state.score;
+    score++;
+    this.setState({ score: score })
+  };
+
+  //Function to increment Losses
+  incrementLosses = () => {
+    losses = this.state.losses;
+    losses++;
+    this.setState({ losses: losses })
   }
 
   render() {
     return (
-      <Wrapper>
-        <Title>Archer Memory Game!</Title>
-        {this.state.images.map(image => (
-          <Image src={image.src} key={image.id} id={image.id} guess={this.makeGuess} />
-        ))}
-      </Wrapper>
+      <>
+        <Navbar
+          score={this.state.score}
+          losses={this.state.losses}
+        />
+        <Wrapper>
+          <Title>Archer Memory Game!</Title>
+          {this.state.images.map(image => (
+            <Image src={image.src} key={image.id} id={image.id} guess={this.makeGuess} />
+          ))}
+        </Wrapper>
+      </>
     );
   }
 }
