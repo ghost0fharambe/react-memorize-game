@@ -44,34 +44,26 @@ class App extends Component {
 
   //Function to handle guessing logic
   makeGuess = id => {
+    //If the game has been won/lost, start new round
+    if (this.state.gameLoss || this.state.gameWin) {
+      this.newRound();
+    }
+
     let array = [];
     let guessed = this.state.guessedArray;
+
     if (guessed.includes(id)) {
       this.setState({
         gameLoss: true,
         gameWin: false
       });
       this.incrementLosses();
-      //this.newRound();
     } else {
       array.push(id);
       this.incrementScore();
       this.setState({ guessedArray: array })
       this.shuffleImages();
     };
-  };
-
-  //Function to reset state/game
-  resetGame = () => {
-    this.setState({
-      images: images,
-      guessedArray: [],
-      score: 0,
-      losses: 0,
-      wins: 0,
-      gameLoss: false,
-      gameWin: false
-    });
   };
 
   //Function to reset Score and increment losses
@@ -104,7 +96,7 @@ class App extends Component {
   incrementWins = () => {
     wins = this.state.wins;
     wins++;
-    this.setState({ wins: wins })
+    this.setState({ wins: wins });
   }
 
   //Function to check if game win
@@ -115,30 +107,21 @@ class App extends Component {
         score: 0,
         gameWin: true,
         gameLoss: false
-      })
-    }
-  }
-
-  renderFlash = () => {
-    const gameLoss = this.state.gameLoss;
-    const gameWin = this.state.gameWin;
-    if (gameLoss === true) {
-      gameFlash = <LossFlash />
-    } else if (gameWin === true) {
-      gameFlash = <WinFlash />
+      });
     }
   }
 
   render() {
-    // this.renderFlash();
     const gameLoss = this.state.gameLoss;
     const gameWin = this.state.gameWin;
-    if (gameLoss === true) {
+    if (gameLoss) {
       gameFlash = <LossFlash />
-    } else if (gameWin === true) {
+    } else if (gameWin) {
       gameFlash = <WinFlash />
+    } else if (!gameWin && !gameLoss) {
+      gameFlash = null;
     }
-    
+
     return (
       <>
         <Navbar
