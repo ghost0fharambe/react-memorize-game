@@ -13,10 +13,13 @@ function Navbar(props) {
 				<div className="collapse navbar-collapse" id="navbarTogglerDemo01">
 					<ul className="navbar-nav ml-auto mt-2 mt-lg-0">
 						<li className="nav-item">
+							<p className="nav-link" id="reset-button" onClick={() => props.resetGame()}>Reset Game</p>
+						</li>
+						<li className="nav-item">
 							<p className="nav-link">Score: {props.score}</p>
 						</li>
 						<li className="nav-item">
-							<p className="nav-link">Losses: {props.lossses}</p>
+							<p className="nav-link">Losses: {props.losses}</p>
 						</li>
 						<li className="nav-item">
 							<p className="nav-link">Highscore: {props.highscore}</p>

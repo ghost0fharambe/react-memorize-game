@@ -17,9 +17,10 @@ class App extends Component {
       guessedArray: [],
       score: 0,
       losses: 0,
-      highscore: 0
-    }
-  }
+      highscore: 0,
+      gameOver: false
+    };
+  };
 
   //Function to shuffle images
   shuffleImages = () => {
@@ -41,12 +42,12 @@ class App extends Component {
     let array = [];
     let guessed = this.state.guessedArray;
     if (guessed.includes(id)) {
-      console.log("lost");
+      this.setState({ gameOver: true });
       this.incrementLosses();
       this.resetGame();
     } else {
-      this.incrementScore();
       array.push(id);
+      this.incrementScore();
       this.setState({ guessedArray: array })
       this.shuffleImages();
     };
@@ -57,12 +58,14 @@ class App extends Component {
     this.setState({
       images: images,
       guessedArray: [],
-      score: 0
+      score: 0,
+      gameOver: false
     });
   };
 
   //Function to increment Score
   incrementScore = () => {
+    this.setHighscore();
     score = this.state.score;
     score++;
     this.setState({ score: score })
@@ -73,7 +76,16 @@ class App extends Component {
     losses = this.state.losses;
     losses++;
     this.setState({ losses: losses })
-  }
+  };
+
+  //Function to set highscore
+  setHighscore = () => {
+    score = this.state.score;
+    let highscore = this.state.highscore;
+    if (score > highscore) {
+      this.setState({ highscore: score });
+    };
+  };
 
   render() {
     return (
@@ -81,6 +93,8 @@ class App extends Component {
         <Navbar
           score={this.state.score}
           losses={this.state.losses}
+          highscore={this.state.highscore}
+          resetGame={this.resetGame}
         />
         <Wrapper>
           <Title>Archer Memory Game!</Title>
@@ -90,7 +104,7 @@ class App extends Component {
         </Wrapper>
       </>
     );
-  }
-}
+  };
+};
 
 export default App;
