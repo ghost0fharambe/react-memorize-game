@@ -19,10 +19,10 @@ function Navbar(props) {
 							<p className="nav-link">Score: {props.score}</p>
 						</li>
 						<li className="nav-item">
-							<p className="nav-link">Losses: {props.losses}</p>
+							<p className="nav-link">Wins: {props.wins}</p>
 						</li>
 						<li className="nav-item">
-							<p className="nav-link">Highscore: {props.highscore}</p>
+							<p className="nav-link">Losses: {props.losses}</p>
 						</li>
 					</ul>
 				</div>

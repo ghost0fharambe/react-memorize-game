@@ -3,11 +3,15 @@ import Navbar from "./components/Navbar";
 import Image from "./components/Image";
 import Wrapper from "./components/Wrapper";
 import Title from "./components/Title";
+import WinFlash from "./components/WinFlash";
+import LossFlash from "./components/LossFlash";
 import images from "./pictures.json";
 import './App.css';
 
 let score;
+let wins;
 let losses;
+let gameFlash;
 
 class App extends Component {
   constructor(props) {
@@ -17,8 +21,9 @@ class App extends Component {
       guessedArray: [],
       score: 0,
       losses: 0,
-      highscore: 0,
-      gameOver: false
+      wins: 0,
+      gameLoss: false,
+      gameWin: false
     };
   };
 
@@ -42,9 +47,12 @@ class App extends Component {
     let array = [];
     let guessed = this.state.guessedArray;
     if (guessed.includes(id)) {
-      this.setState({ gameOver: true });
+      this.setState({
+        gameLoss: true,
+        gameWin: false
+      });
       this.incrementLosses();
-      this.resetGame();
+      //this.newRound();
     } else {
       array.push(id);
       this.incrementScore();
@@ -59,45 +67,91 @@ class App extends Component {
       images: images,
       guessedArray: [],
       score: 0,
-      gameOver: false
+      losses: 0,
+      wins: 0,
+      gameLoss: false,
+      gameWin: false
     });
   };
 
+  //Function to reset Score and increment losses
+  newRound = () => {
+    this.setState({
+      images: images,
+      guessedArray: [],
+      score: 0,
+      gameLoss: false,
+      gameWin: false
+    });
+  }
+
   //Function to increment Score
   incrementScore = () => {
-    this.setHighscore();
+    this.checkWin();
     score = this.state.score;
     score++;
-    this.setState({ score: score })
+    this.setState({ score: score });
   };
 
   //Function to increment Losses
   incrementLosses = () => {
     losses = this.state.losses;
     losses++;
-    this.setState({ losses: losses })
+    this.setState({ losses: losses });
   };
 
-  //Function to set highscore
-  setHighscore = () => {
-    score = this.state.score;
-    let highscore = this.state.highscore;
-    if (score > highscore) {
-      this.setState({ highscore: score });
-    };
-  };
+  //Function to increment Wins
+  incrementWins = () => {
+    wins = this.state.wins;
+    wins++;
+    this.setState({ wins: wins })
+  }
+
+  //Function to check if game win
+  checkWin = () => {
+    if (this.state.score === 8) {
+      this.incrementWins();
+      this.setState({
+        score: 0,
+        gameWin: true,
+        gameLoss: false
+      })
+    }
+  }
+
+  renderFlash = () => {
+    const gameLoss = this.state.gameLoss;
+    const gameWin = this.state.gameWin;
+    if (gameLoss === true) {
+      gameFlash = <LossFlash />
+    } else if (gameWin === true) {
+      gameFlash = <WinFlash />
+    }
+  }
 
   render() {
+    // this.renderFlash();
+    const gameLoss = this.state.gameLoss;
+    const gameWin = this.state.gameWin;
+    if (gameLoss === true) {
+      gameFlash = <LossFlash />
+    } else if (gameWin === true) {
+      gameFlash = <WinFlash />
+    }
+    
     return (
       <>
         <Navbar
           score={this.state.score}
+          wins={this.state.wins}
           losses={this.state.losses}
-          highscore={this.state.highscore}
           resetGame={this.resetGame}
         />
         <Wrapper>
-          <Title>Archer Memory Game!</Title>
+          <Title>
+            Archer Memory Game!
+            {gameFlash}
+          </Title>
           {this.state.images.map(image => (
             <Image src={image.src} key={image.id} id={image.id} guess={this.makeGuess} />
           ))}
