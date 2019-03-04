@@ -111,6 +111,19 @@ class App extends Component {
     }
   }
 
+  //Function to reset game
+  resetGame = () => {
+    this.setState({
+      images,
+      guessedArray: [],
+      score: 0,
+      losses: 0,
+      wins: 0,
+      gameLoss: false,
+      gameWin: false
+    });
+  }
+
   render() {
     const gameLoss = this.state.gameLoss;
     const gameWin = this.state.gameWin;
