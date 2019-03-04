@@ -143,15 +143,17 @@ class App extends Component {
           losses={this.state.losses}
           resetGame={this.resetGame}
         />
-        <Wrapper>
-          <Title>
-            Archer Memory Game!
+        <div>
+          <Wrapper>
+            <Title>
+              Archer Memory Game!
             {gameFlash}
-          </Title>
-          {this.state.images.map(image => (
-            <Image src={image.src} key={image.id} id={image.id} guess={this.makeGuess} />
-          ))}
-        </Wrapper>
+            </Title>
+            {this.state.images.map(image => (
+              <Image src={image.src} key={image.id} id={image.id} guess={this.makeGuess} />
+            ))}
+          </Wrapper>
+        </div>
       </>
     );
   };
