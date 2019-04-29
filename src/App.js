@@ -44,13 +44,14 @@ class App extends Component {
 
   //Function to handle guessing logic
   makeGuess = id => {
+    console.log(id);
     //If the game has been won/lost, start new round
     if (this.state.gameLoss || this.state.gameWin) {
       this.newRound();
-    }
+    };
 
-    let array = [];
     let guessed = this.state.guessedArray;
+    let array = guessed;
 
     if (guessed.includes(id)) {
       this.setState({
@@ -64,9 +65,10 @@ class App extends Component {
       this.setState({ guessedArray: array })
       this.shuffleImages();
     };
+    console.log(this.state)
   };
 
-  //Function to reset Score and increment losses
+  //Function to reset Round
   newRound = () => {
     this.setState({
       images: images,
@@ -75,21 +77,25 @@ class App extends Component {
       gameLoss: false,
       gameWin: false
     });
-  }
+  };
 
   //Function to increment Score
   incrementScore = () => {
-    this.checkWin();
     score = this.state.score;
     score++;
     this.setState({ score: score });
+    this.checkWin();
   };
 
   //Function to increment Losses
   incrementLosses = () => {
     losses = this.state.losses;
     losses++;
-    this.setState({ losses: losses });
+    this.setState({
+      losses: losses,
+      score: 0,
+      guessedArray: []
+    });
   };
 
   //Function to increment Wins
@@ -97,19 +103,19 @@ class App extends Component {
     wins = this.state.wins;
     wins++;
     this.setState({ wins: wins });
-  }
+  };
 
   //Function to check if game win
   checkWin = () => {
-    if (this.state.score === 8) {
+    if (this.state.score === 7) {
       this.incrementWins();
       this.setState({
         score: 0,
         gameWin: true,
         gameLoss: false
       });
-    }
-  }
+    };
+  };
 
   //Function to reset game
   resetGame = () => {
@@ -122,7 +128,7 @@ class App extends Component {
       gameLoss: false,
       gameWin: false
     });
-  }
+  };
 
   render() {
     const gameLoss = this.state.gameLoss;
@@ -133,7 +139,7 @@ class App extends Component {
       gameFlash = <WinFlash />
     } else if (!gameWin && !gameLoss) {
       gameFlash = null;
-    }
+    };
 
     return (
       <>
